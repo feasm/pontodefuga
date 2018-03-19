@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class MenuPanel {
@@ -14,6 +15,13 @@ public class MenuFlowManager : MonoBehaviour {
     public MenuPanel[] panels;
     bool changing = false;
     int currPanel = 0;
+
+	string[] stages = {
+		"Stage01_01",
+		"Stage01_02",
+		"Stage01_03",
+		"Stage01_04"
+	};
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.Escape)) {
@@ -37,6 +45,11 @@ public class MenuFlowManager : MonoBehaviour {
         if (changing) return;
         StartCoroutine(IFadeAndChangePanel(id));
     }
+
+	public void SelectLevel(int id) {
+		if (changing) return;
+		SceneManager.LoadScene (stages [id]);
+	}
 
     IEnumerator IFadeAndChangePanel(int id) {
         changing = true;
