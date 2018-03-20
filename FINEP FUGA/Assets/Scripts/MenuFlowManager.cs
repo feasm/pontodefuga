@@ -13,8 +13,10 @@ public class MenuPanel {
 public class MenuFlowManager : MonoBehaviour {
     public Image[] fadeImages;
     public MenuPanel[] panels;
-    bool changing = false;
-    int currPanel = 0;
+    bool changing = false;//barras pretas estão em transição
+    int currPanel = 0;//qual o painel atual?
+
+    int worldID = 0;
 
 	string[] stages = {
 		"Stage01_01",
@@ -48,8 +50,21 @@ public class MenuFlowManager : MonoBehaviour {
 
 	public void SelectLevel(int id) {
 		if (changing) return;
-		SceneManager.LoadScene (stages [id]);
+        var scene = "Stage" + worldID.ToString("00") + "_" + id.ToString("00");
+        if(Application.CanStreamedLevelBeLoaded(scene))
+            StartCoroutine(ISelectLevel(scene));
 	}
+
+    IEnumerator ISelectLevel(string name){
+        for (int i = 0; i < fadeImages.Length; i++)//fade da tela antes de carregar a cena
+            StartCoroutine(IFadeImage(fadeImages[i], Screen.height / 2f));
+        yield return new WaitForSeconds(0.5f);
+        SceneManager.LoadScene(name);
+    }
+
+    public void SelectWorld(int id) {
+        worldID = id;
+    }
 
     IEnumerator IFadeAndChangePanel(int id) {
         changing = true;
