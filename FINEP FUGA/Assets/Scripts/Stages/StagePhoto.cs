@@ -19,7 +19,7 @@ public class StagePhoto : MonoBehaviour {
 	}
 
 	private void SetWidthToCamera() {
-		var width = Camera.main.orthographicSize * 2.0 * Screen.width / Screen.height;
+		var width = Camera.main.orthographicSize / 2 * Screen.width / Screen.height;
 
 		var spriteRenderer = GetComponent<SpriteRenderer> ();
 		Sprite s = spriteRenderer.sprite;
