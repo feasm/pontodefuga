@@ -10,6 +10,9 @@ public class MenuLevelButton : MonoBehaviour {
     public GameObject activePanel;
     public string levelKey = "";
     public int level = 1;
+    public string inactiveMessage;
+    public MenuNotification notificationManager;
+    public MenuFlowManager flowManager;
 
 	// Use this for initialization
 	void Start () {
@@ -19,7 +22,7 @@ public class MenuLevelButton : MonoBehaviour {
     void Setup() {
         //TODO; Chamar ShowStarts com o número de estrelas ganhas no nível
         ShowStarts(2);
-        ActivateSelf(level <= 1);
+        ActivateSelf(level <= 3);
     }
 
     void ActivateSelf(bool value = true) {
@@ -39,5 +42,25 @@ public class MenuLevelButton : MonoBehaviour {
         for (int i = 0; i < inactiveStars.Length; i++) {
             inactiveStars[i].SetActive(i >= amount);
         }
+    }
+
+    public void Click() {
+        if (activePanel != null && !activePanel.activeSelf)
+            notificationManager.ShowMessage(inactiveMessage);
+    }
+
+    public void SelectWorld(){
+        if (activePanel == null || activePanel.activeSelf)
+            flowManager.SelectWorld(level);
+    }
+
+    public void SelectLevel() {
+        if (activePanel == null || activePanel.activeSelf)
+            flowManager.SelectLevel(level);
+    }
+
+    public void FadeToPanel(int id) {
+        if (activePanel == null || activePanel.activeSelf)
+            flowManager.FadeAndChangePanel(id);
     }
 }

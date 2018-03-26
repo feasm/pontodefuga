@@ -13,17 +13,14 @@ public class MenuPanel {
 public class MenuFlowManager : MonoBehaviour {
     public Image[] fadeImages;
     public MenuPanel[] panels;
+    public AudioClip[] tipClips;//os audio clips que tocam, explicando as fases
     bool changing = false;//barras pretas estão em transição
     int currPanel = 0;//qual o painel atual?
 
     int worldID = 0;
 
-	string[] stages = {
-		"Stage01_01",
-		"Stage01_02",
-		"Stage01_03",
-		"Stage01_04"
-	};
+    public AudioSource aSrc;
+    public MenuNotification notification;
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.Escape)) {
@@ -64,10 +61,37 @@ public class MenuFlowManager : MonoBehaviour {
 
     public void SelectWorld(int id) {
         worldID = id;
+
+        //toca o clipe de dicas do grupo de fases caso seja a primeira vez acessndo ele
+        var value = PlayerPrefs.GetInt("audioTipsPlayed", 0);
+        if (((value >> id) & 1) == 0) {
+            value |= (1 << id);
+            PlayerPrefs.SetInt("audioTipsPlayed", value);
+            PlayTipClip(id, 1.5f);
+        }
+    }
+
+    public void PlayTipClip() {
+        PlayTipClip(worldID, 0f);
+    }
+
+    public void PlayTipClip(int groupID, float delay) {
+        if (aSrc != null && aSrc.isPlaying)
+            notification.ShowMessage("Mensagem já está tocando!");
+        else
+            StartCoroutine(IPlayDelayedTip(groupID - 1, delay));//contagem dos clips inicia no 0, portando é necessário corrigir
+    }
+
+    IEnumerator IPlayDelayedTip(int tipID, float delay) {
+        yield return new WaitForSeconds(delay);
+        if (aSrc != null && tipID >= 0 && tipID < tipClips.Length && tipClips[tipID] != null) {
+            aSrc.PlayOneShot(tipClips[tipID], 1f);
+        }
     }
 
     IEnumerator IFadeAndChangePanel(int id) {
         changing = true;
+
         for (int i = 0; i < fadeImages.Length; i++ )
             StartCoroutine(IFadeImage(fadeImages[i], Screen.height / 2f));
         yield return new WaitForSeconds(0.5f);
@@ -75,6 +99,7 @@ public class MenuFlowManager : MonoBehaviour {
         for (int i = 0; i < fadeImages.Length; i++)
             StartCoroutine(IFadeImage(fadeImages[i], 0f));
         yield return new WaitForSeconds(0.5f);
+
         changing = false;
     }
 
