@@ -115,4 +115,8 @@ public class MenuFlowManager : MonoBehaviour {
             yield return new WaitForEndOfFrame();
         }
     }
+
+    public int GetWorldID() {
+        return worldID;
+    }
 }
