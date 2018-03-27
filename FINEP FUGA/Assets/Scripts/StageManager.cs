@@ -7,9 +7,10 @@ using UnityEngine.SceneManagement;
 public class StageManager : MonoBehaviour {
 
 	// TODO: Deixar esta variável proporcional a SCREEN_SIZE
-	public static int HIT_RANGE = 2;
+	public static float HIT_RANGE = .2f;
 
 	public SpriteRenderer horizonLine;
+	public SpriteRenderer horizonBalloon;
 	public GameObject horizonLineHit;
 
 	public float horizonLineSpeed;
@@ -26,6 +27,11 @@ public class StageManager : MonoBehaviour {
 	private float secondsCount;
 	private int minuteCount;
 	private int hourCount;
+
+	public GameObject PF1;
+	public GameObject PF2;
+	public GameObject PF3;
+	public GameObject PF4;
 
 	void Start () {
 		Setup ();
@@ -67,6 +73,17 @@ public class StageManager : MonoBehaviour {
 		color.a = alpha;
 
 		horizonLine.color = color;
+		var children = horizonLine.GetComponentsInChildren<SpriteRenderer> ();
+		foreach (SpriteRenderer child in children) {
+			color = child.color;
+			color.a = alpha;
+			child.color = color;
+		}
+		// horizonBalloon.color = color;
+	}
+
+	private void SetActive(GameObject target, bool active) {
+		target.SetActive (active);
 	}
 
 	private void OnMouseMove() {
@@ -74,10 +91,16 @@ public class StageManager : MonoBehaviour {
 		mousePosition.z = 10.0f;
 		mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
 
-		horizonLine.transform.Translate (
-			0,
-			mousePosition.y - horizonLine.transform.position.y,
-			0
+		var newPosition = new Vector3 (
+			horizonLine.transform.position.x,
+			mousePosition.y,
+			-5
+		);
+
+		horizonLine.transform.position = Vector3.Lerp(
+			horizonLine.transform.position, 
+			newPosition, 
+			10 * Time.deltaTime
 		);
 	}
 
@@ -97,7 +120,8 @@ public class StageManager : MonoBehaviour {
 		SetHorizonLineAlpha (1);
 
 		// TODO: Animar linha do horizonte se ajustando no ponto correto
-		horizonLine.gameObject.transform.position = horizonLineHit.transform.position;
+		var newPosition = horizonLineHit.transform.position;
+		horizonLine.gameObject.transform.position = new Vector3(newPosition.x, newPosition.y, -5);
 
 		CompleteStage ();
 	}
