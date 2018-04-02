@@ -5,9 +5,24 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class StageManager : MonoBehaviour {
+	enum GameState {
+		HorizonLine,
+		EscapePoint,
+		ChangingState
+	};
 
 	// TODO: Deixar esta variável proporcional a SCREEN_SIZE
 	public static float HIT_RANGE = .2f;
+	public static float CHANGE_STATE_SPEED = 5;
+
+	GameState state;
+
+	public GameObject image;
+	public Vector2 initialImagePosition;
+
+	public RectTransform imageHeader;
+	public Vector3 initialImageHeaderPosition;
+	public RectTransform canvasCenter;
 
 	public SpriteRenderer horizonLine;
 	public SpriteRenderer horizonBalloon;
@@ -28,10 +43,25 @@ public class StageManager : MonoBehaviour {
 	private int minuteCount;
 	private int hourCount;
 
+	public CanvasGroup scrollView;
+
+	public int PFCount;
+
 	public GameObject PF1;
 	public GameObject PF2;
 	public GameObject PF3;
 	public GameObject PF4;
+	private GameObject PF;
+
+	public GameObject PF1Indicator;
+	public GameObject PF2Indicator;
+	public GameObject PFIndicator;
+
+	private bool PFSelected;
+
+	private Vector3 InitialPF;
+	private Vector3 InitialPF1;
+	private Vector3 InitialPF2;
 
 	void Start () {
 		Setup ();
@@ -43,20 +73,36 @@ public class StageManager : MonoBehaviour {
 	}
 
 	private void HandleInput() {
-		if (canMoveLine) {
-			if (Input.GetMouseButtonDown (0)) {
-				horizonLineMoving = true;
-				SetHorizonLineAlpha (1);
-			} else if (Input.GetMouseButtonUp (0)) {
-				horizonLineMoving = false;
-				SetHorizonLineAlpha (0);
+		switch(state) {
+		case GameState.HorizonLine:
+			if (canMoveLine) {
+				if (Input.GetMouseButtonDown (0)) {
+					horizonLineMoving = true;
+					SetHorizonLineAlpha (1);
+				} else if (Input.GetMouseButtonUp (0)) {
+					horizonLineMoving = false;
+					SetHorizonLineAlpha (0);
 
-				CheckHorizonLineHit ();
-			}
+					CheckHorizonLineHit ();
+				}
 
-			if ( Input.GetMouseButton(0) ) {
-				OnMouseMove ();
+				if (Input.GetMouseButton (0)) {
+					OnMouseMove ();
+				}
 			}
+			break;
+		case GameState.EscapePoint:
+			if (PFSelected) {
+				if (Input.GetMouseButton (0)) {
+					OnPFMove ();
+				} else {
+					CheckPFHit ();
+				}
+			}
+			break;
+		case GameState.ChangingState:
+			ChangingGameState ();
+			break;
 		}
 	}
 
@@ -66,6 +112,47 @@ public class StageManager : MonoBehaviour {
 		canMoveLine = true;
 		horizonLineMoving = false;
 		stageCompleted = false;
+		state = GameState.HorizonLine;
+
+		PFSelected = false;
+
+		setupPFs ();
+
+		initialImagePosition = image.transform.position;
+		image.transform.position = new Vector3(0, image.transform.position.y, image.transform.position.z);
+		horizonLine.transform.position = new Vector3(0, horizonLine.transform.position.y, horizonLine.transform.position.z);
+
+		setupCanvas ();
+	}
+
+	private void setupPFs() {
+		if (PF1) {
+			InitialPF1 = PF1.transform.position;
+			PF1.SetActive (false);
+		}
+
+		if (PF2) {
+			InitialPF2 = PF2.transform.position;
+			PF2.SetActive (false);
+		}
+
+		if (PF3) {
+			PF3.SetActive (false);
+		}
+
+		if (PF4) {
+			PF4.SetActive (false);
+		}
+
+
+
+	}
+
+	private void setupCanvas() {
+		scrollView.alpha = 0;
+
+		initialImageHeaderPosition = imageHeader.anchoredPosition;
+		imageHeader.anchoredPosition = new Vector2(canvasCenter.anchoredPosition.x, imageHeader.anchoredPosition.y);
 	}
 
 	private void SetHorizonLineAlpha(float alpha) {
@@ -104,14 +191,61 @@ public class StageManager : MonoBehaviour {
 		);
 	}
 
+	private void OnPFMove() {
+		var mousePosition = Input.mousePosition;
+		mousePosition.z = 10.0f;
+		mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
+
+		var newPosition = new Vector3 (
+			mousePosition.x,
+			mousePosition.y,
+			PF.transform.position.z
+		);
+
+		PF.transform.position = Vector3.Lerp(
+			PF.transform.position, 
+			newPosition, 
+			10 * Time.deltaTime
+		);
+	}
+
+	private void CheckPFHit() {
+		var difference = PF.transform.position.y - InitialPF.y;
+
+		if (Mathf.Abs (difference) < HIT_RANGE) {
+			LockPF (true);
+		} else {
+			LockPF (false);
+			// hitErrors += 1;
+			// errorsText.text = "Errors: " + hitErrors;
+		}
+	}
+
+	private void LockPF(bool hit) {
+		// TODO: Animar linha do horizonte se ajustando no ponto correto
+		PF.transform.position = InitialPF;
+		PFSelected = false;
+
+		if (hit) {
+			PFCount -= 1;
+			if (PFCount == 0) {
+				CompleteStage ();
+			}
+		}
+		if (!hit) {
+			PF.SetActive (false);
+		}
+	}
+
 	private void CheckHorizonLineHit() {
 		var difference = horizonLine.gameObject.transform.position.y - horizonLineHit.transform.position.y;
 
 		if (Mathf.Abs (difference) < HIT_RANGE) {
 			LockHorizonLine ();
 		} else {
-			hitErrors += 1;
-			errorsText.text = "Errors: " + hitErrors;
+			// TODO: Remover se realmente não houver erros
+			// hitErrors += 1;
+			// errorsText.text = "Errors: " + hitErrors;
 		}
 	}
 
@@ -121,9 +255,10 @@ public class StageManager : MonoBehaviour {
 
 		// TODO: Animar linha do horizonte se ajustando no ponto correto
 		var newPosition = horizonLineHit.transform.position;
-		horizonLine.gameObject.transform.position = new Vector3(newPosition.x, newPosition.y, -5);
+		horizonLine.gameObject.transform.position = new Vector3(horizonLine.gameObject.transform.position.x, newPosition.y, -5);
 
-		CompleteStage ();
+		ChangeGameState ();
+		// CompleteStage ();
 	}
 
 	private void CompleteStage() {
@@ -133,6 +268,9 @@ public class StageManager : MonoBehaviour {
 		var color = StageCompleted.color;
 		color.a = 1;
 		StageCompleted.color = color;
+
+		// TODO: Chamar StageInfo
+		// StageInfo.instance.SetStageInfo(hourCount * 360 + minuteCount * 60 + secondsCount)
 
 		StartCoroutine (BackToMenu());
 	}
@@ -163,5 +301,80 @@ public class StageManager : MonoBehaviour {
 
 		// TODO: Animar volta ao Menu
 		SceneManager.LoadScene ("menu");
+	}
+
+	public void SelectPF(int index) {
+		switch(index) {
+		case 1:
+			PF = PF1;
+			InitialPF = InitialPF1;
+			break;
+
+		case 2:
+			PF = PF2;
+			InitialPF = InitialPF2;
+			break;
+
+		case 3:
+			PF = PF3;
+			break;
+
+		case 4:
+			PF = PF4;
+			break;
+
+		default:
+			Debug.Log ("Default");
+			break;
+		}
+
+		SetActive (PF, true);
+		PFSelected = true;
+	}
+
+	private void ChangeGameState() {
+		if (PFCount > 0) {
+			state = GameState.ChangingState;
+			ChangeToEscapePoint ();
+		} else {
+			CompleteStage ();
+		}
+	}
+
+	private void ChangingGameState() {
+		image.transform.position = Vector3.Lerp(
+			image.transform.position, 
+			new Vector3(initialImagePosition.x, image.transform.position.y, image.transform.position.z), 
+			CHANGE_STATE_SPEED * Time.deltaTime
+		);
+
+		horizonLine.transform.position = Vector3.Lerp(
+			horizonLine.transform.position, 
+			new Vector3(initialImagePosition.x, horizonLine.transform.position.y, horizonLine.transform.position.z), 
+			CHANGE_STATE_SPEED * Time.deltaTime
+		);
+
+		imageHeader.anchoredPosition = Vector2.Lerp (
+			imageHeader.anchoredPosition, 
+			initialImageHeaderPosition, 
+			CHANGE_STATE_SPEED * Time.deltaTime
+		);
+	}
+
+	private void ChangeToEscapePoint() {
+//		StartCoroutine ();
+		StartCoroutine (FadeIn (scrollView));
+	}
+
+	private IEnumerator FadeIn(CanvasGroup canvasObj) {
+		float alpha = 0;
+
+		while (alpha < 1) {
+			alpha += .03f;
+			canvasObj.alpha = alpha;
+			yield return new WaitForEndOfFrame();
+		}
+
+		state = GameState.EscapePoint;
 	}
 }
