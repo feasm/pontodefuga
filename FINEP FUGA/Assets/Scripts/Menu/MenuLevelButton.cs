@@ -17,12 +17,12 @@ public class MenuLevelButton : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         Setup();
+        ActivateSelf(level <= 3);//TODO: - Carregar apenas levels destravados
 	}
 
-    void Setup() {
+    public void Setup() {
         //TODO; Chamar ShowStarts com o número de estrelas ganhas no nível
         ShowStarts(PlayerPrefs.GetInt(levelKeyPrefix + level.ToString("00"), 0));
-        ActivateSelf(level <= 3);
     }
 
     void ActivateSelf(bool value = true) {
@@ -62,5 +62,9 @@ public class MenuLevelButton : MonoBehaviour {
     public void FadeToPanel(int id) {
         if (activePanel == null || activePanel.activeSelf)
             flowManager.FadeAndChangePanel(id);
+    }
+
+    public void SetLevelKeyPrefix(string pref) {
+        levelKeyPrefix = pref;
     }
 }
