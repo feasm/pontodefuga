@@ -11,6 +11,8 @@ public class MenuPanel {
 }
 
 public class MenuFlowManager : MonoBehaviour {
+    static bool gameJustBegun = true;
+
     public RectTransform panel_title, panel_sky, panel_levels;//itens para a transição de título para transição de fases
 
     public Image[] fadeImages;
@@ -26,7 +28,6 @@ public class MenuFlowManager : MonoBehaviour {
 
     public AudioSource aSrc;
     public AudioClip clickClip;
-    AudioSource clickAsrc = null;
     public MenuNotification notification;
 
     void Start() {
@@ -34,10 +35,13 @@ public class MenuFlowManager : MonoBehaviour {
     }
 
     void Setup() {
-        if (clickAsrc == null) {
-            clickAsrc = gameObject.AddComponent<AudioSource>();
-            clickAsrc.spatialBlend = 0f;
-        }
+        if (!gameJustBegun)//apenas mostra o title caso o aplicativo tenha sido acabado de ser aberto
+            HideTitle(100f);
+        gameJustBegun = false;
+
+        //esconde as baras pretas
+        for (int i = 0; i < fadeImages.Length; i++)
+            StartCoroutine(IFadeImage(fadeImages[i], 0f));
     }
 
     void Update() {
@@ -143,26 +147,36 @@ public class MenuFlowManager : MonoBehaviour {
     IEnumerator IFadeImage(Image image, float height, float speed = 2f) {
         float startHeight = image.rectTransform.rect.height;
         float timer = 0f;
+
+        yield return new WaitForEndOfFrame();//wait inicial para evitar erros quando a cena está travada
         while (timer < 1f) {
+            yield return new WaitForEndOfFrame();
             timer += speed * Time.deltaTime;
             timer = Mathf.Clamp01(timer);
             var rect = image.rectTransform.sizeDelta;
             rect.y = Mathf.Lerp(rect.y, height, timer);
             image.rectTransform.sizeDelta = rect;
-            yield return new WaitForEndOfFrame();
         }
     }
 
     public void ShowTitle() {
+        ShowTitle(0.75f);
+    }
+
+    public void ShowTitle(float speed) {
         if (fadingTitle) return;
 
-        StartCoroutine(IMoveTitle(0f, 0f, -panel_levels.sizeDelta.y, true, 0.75f));
+        StartCoroutine(IMoveTitle(0f, 0f, -panel_levels.sizeDelta.y, true, speed));
     }
 
     public void HideTitle() {
+        HideTitle(0.75f);
+    }
+
+    public void HideTitle(float speed = 0.75f) {
         if (fadingTitle) return;
 
-        StartCoroutine(IMoveTitle(Screen.height * 1.5f, panel_sky.sizeDelta.y / 2, 0f, false, 0.75f));
+        StartCoroutine(IMoveTitle(Screen.currentResolution.height, panel_sky.sizeDelta.y / 2, 0f, false, speed));
     }
 
     IEnumerator IMoveTitle(float pos_title, float pos_sky, float pos_levels, bool toTitle, float speed = 0.75f) {
@@ -181,7 +195,6 @@ public class MenuFlowManager : MonoBehaviour {
         dPos_levels.y = pos_levels;
 
         while (lerp < 1f) {
-            yield return new WaitForEndOfFrame();
             lerp += Time.deltaTime * speed;
 
             var diff = Mathf.Abs(panel_title.anchoredPosition.y - dPos_title.y);
@@ -191,6 +204,8 @@ public class MenuFlowManager : MonoBehaviour {
             panel_title.anchoredPosition = Vector3.Lerp(panel_title.anchoredPosition, dPos_title, lerp);
             panel_sky.anchoredPosition = Vector3.Lerp(panel_sky.anchoredPosition, dPos_sky, lerp);
             panel_levels.anchoredPosition = Vector3.Lerp(panel_levels.anchoredPosition, dPos_levels, lerp);
+
+            yield return new WaitForEndOfFrame();
         }
 
         fadingTitle = false;
@@ -198,10 +213,7 @@ public class MenuFlowManager : MonoBehaviour {
     }
 
     public void PlayClickSound() {
-        if (clickClip == null || clickAsrc == null) return;
-
-        clickAsrc.pitch = Random.Range(.9f, 1.0f);
-        clickAsrc.PlayOneShot(clickClip, 1f);
+        AudioPlayer.instance.PlayAudio(AudioSFX.Click, Random.Range(.9f, 1f));
     }
 
     public void ShowTipPanel() {
