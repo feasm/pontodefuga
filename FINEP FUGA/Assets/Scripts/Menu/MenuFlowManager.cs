@@ -131,7 +131,7 @@ public class MenuFlowManager : MonoBehaviour {
 
         if (currPanel >= 0 && currPanel < panels.Length && id >= 0 && id < panels.Length) {
             for (int i = 0; i < fadeImages.Length; i++)
-                StartCoroutine(IFadeImage(fadeImages[i], Screen.currentResolution.height / 2));
+                StartCoroutine(IFadeImage(fadeImages[i], Screen.currentResolution.height / 2f));
             yield return new WaitForSeconds(0.5f);
         }
         ChangePanel(id);
