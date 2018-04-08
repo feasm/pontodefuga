@@ -64,5 +64,31 @@ public class StageInfo : MonoBehaviour {
             PlayerPrefs.SetInt("stars_world_" + worldID.ToString("00") + "_stage_" + stageID.ToString("00"), stars);
     }
 
-    
+    public float GetStageTime() {
+        return stageTime;
+    }
+
+    public float GetTimeForStar(int star){
+        int index = starTimes.Length - star;
+        if (index < 0 || index >= starTimes.Length)
+            return -1f;
+        return starTimes[index] * difficultyMultiplier;
+    }
+
+    public string GetTimeString(string minSufix = "min", string secSufix = "s") {
+        return GetTimeString(stageTime, minSufix, secSufix);
+    }
+
+    public string GetTimeString(float time, string minSufix = "min", string secSufix = "s") {
+        var str = "";
+
+        var mins = Mathf.FloorToInt(time / 60f);
+        if (mins > 0)
+            str += mins.ToString() + minSufix + " ";
+
+        var secs = Mathf.FloorToInt(time) - mins * 60;
+        str += secs.ToString("00") + secSufix;
+
+        return str;
+    }
 }

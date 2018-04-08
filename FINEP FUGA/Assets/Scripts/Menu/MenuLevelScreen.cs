@@ -19,12 +19,14 @@ public class MenuLevelScreen : MonoBehaviour {
                 scrollSum += scrollIncrement;
             buttons[i].gameObject.SetActive(exists);
 
-            buttons[i].SetLevelKeyPrefix("stars_world_" + StageInfo.instance.GetWorldID().ToString("00") + "_stage_");
+            buttons[i].SetLevelKeyPrefix("world_" + StageInfo.instance.GetWorldID().ToString("00") + "_stage_");
             buttons[i].Setup();
         }
 
-        var size = scrollRect.sizeDelta;
-        size.y = scrollSum;
-        scrollRect.sizeDelta = size;
+        if (scrollRect != null) {
+            var size = scrollRect.sizeDelta;
+            size.y = scrollSum;
+            scrollRect.sizeDelta = size;
+        }
     }
 }
