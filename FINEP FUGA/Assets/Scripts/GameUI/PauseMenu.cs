@@ -17,8 +17,13 @@ public class PauseMenu : MonoBehaviour {
     public PauseMenuButton[] menuButtons;
 
     void Update() {
-        if (Input.GetKeyDown(KeyCode.Escape))
-            ShowMenu();
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            if(pausePanel.activeSelf)
+                HideMenu();
+            else
+                ShowMenu();
+        }
+            
     }
 	
     public void ShowMenu() {

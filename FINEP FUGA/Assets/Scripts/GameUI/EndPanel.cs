@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class EndPanel : MonoBehaviour {
+    static EndPanel manager;//o manager encontrado nesta cena, para ser chamado estaticamente
+
+    public GameObject endPanel;
+
     public Image background;//BG, que dá fade pra ficar 100% opaco
 
     public Image stageImage;//a imagem do estágio, que aparece à esquerda da tela
@@ -18,18 +22,29 @@ public class EndPanel : MonoBehaviour {
 
     public Image stampImage;//imagem do carimbo, desce rodando e diminuindo escala
 
-    void Start() {
-        //StageInfo.instance.SetStageInfo(10f);
-        //PlayAnimation();
+    bool playing = false;
+
+    void Awake() {
+        manager = this;
     }
 
-    public void PlayAnimation() {
-        StartCoroutine(IPlayEndSequence());
+    public static void PlayEndAnimation(float delay = 2f) {
+        if (manager != null)
+            manager.PlayAnimation(delay);
     }
 
-    IEnumerator IPlayEndSequence() {
-        yield return new WaitForSeconds(2f);
+    //toca a animação final de jogo, assume que StageInfo.instance.SetStageInfo foi chamado
+    public void PlayAnimation(float delay = 2f) {
+        if (playing) return;
+
+        playing = true;
+        StartCoroutine(IPlayEndSequence(delay));
+    }
+
+    IEnumerator IPlayEndSequence(float delay) {
+        yield return new WaitForSeconds(delay);
         //FUNDO
+        endPanel.SetActive(true);
         StartCoroutine(IFadeImage(background, 1f));
         yield return new WaitForSeconds(0.1f);
 
