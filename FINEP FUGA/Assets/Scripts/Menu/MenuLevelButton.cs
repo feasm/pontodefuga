@@ -7,22 +7,44 @@ public class MenuLevelButton : MonoBehaviour {
     public GameObject[] activeStars;
     public GameObject[] inactiveStars;
     public Image title;
-    public GameObject activePanel;
-    public string levelKeyPrefix = "stars_world_00_stage_00";
+    public GameObject activePanel, inactivePanel;
+    public string levelKeyPrefix = "world_00_stage_00";
     public int level = 1;
     public string inactiveMessage;
     public MenuNotification notificationManager;
     public MenuFlowManager flowManager;
 
+    bool pulse = false;
+    public float pulseScale = 1f, normalScale= 1f;
+    Coroutine pulseCoroutine;//mantém referência da pulse coroutine, pra pará-la depois
+
 	// Use this for initialization
 	void Start () {
         Setup();
-        ActivateSelf(level <= 3);//TODO: - Carregar apenas levels destravados
 	}
 
     public void Setup() {
-        //TODO; Chamar ShowStarts com o número de estrelas ganhas no nível
-        ShowStarts(PlayerPrefs.GetInt(levelKeyPrefix + level.ToString("00"), 0));
+        SetLevelKeyPrefix("world_" + StageInfo.instance.GetWorldID().ToString("00") + "_stage_");
+        var unlocked = PlayerPrefs.GetInt("unlocked_" + levelKeyPrefix + level.ToString("00"), level) == 1;
+        var stars = PlayerPrefs.GetInt("stars_" + levelKeyPrefix + level.ToString("00"), -1);
+
+        ActivateSelf(unlocked);
+        ShowStarts(stars);
+
+        pulse = true;
+    }
+
+    void Update() {
+        if (pulse) {
+            var unlocked = PlayerPrefs.GetInt("unlocked_" + levelKeyPrefix + level.ToString("00"), level) == 1;
+            var stars = PlayerPrefs.GetInt("stars_" + levelKeyPrefix + level.ToString("00"), -1);
+
+            if (stars < 0 && unlocked)
+                StartPulse();
+            else
+                StopPulse();
+        }
+        pulse = false;
     }
 
     void ActivateSelf(bool value = true) {
@@ -33,6 +55,8 @@ public class MenuLevelButton : MonoBehaviour {
 
         if(activePanel != null)
             activePanel.SetActive(value);
+        if (inactivePanel != null)
+            inactivePanel.SetActive(!value);
     }
 
     void ShowStarts(int amount) {
@@ -40,13 +64,15 @@ public class MenuLevelButton : MonoBehaviour {
             activeStars[i].SetActive(i < amount);
         }
         for (int i = 0; i < inactiveStars.Length; i++) {
-            inactiveStars[i].SetActive(i >= amount);
+            inactiveStars[i].SetActive(i >= amount && amount >= 0);
         }
     }
 
     public void Click() {
-        if (activePanel != null && !activePanel.activeSelf)
+        if (activePanel != null && !activePanel.activeSelf) {
             notificationManager.ShowMessage(inactiveMessage);
+            DoSinglePulse();
+        }
     }
 
     public void SelectWorld(){
@@ -66,5 +92,40 @@ public class MenuLevelButton : MonoBehaviour {
 
     public void SetLevelKeyPrefix(string pref) {
         levelKeyPrefix = pref;
+    }
+
+    public void DoSinglePulse() {
+        StartCoroutine(IPulse(10f, false));
+    }
+
+    public void StartPulse() {
+        StopPulse();
+        if(gameObject.activeSelf)
+            pulseCoroutine = StartCoroutine(IPulse(2f));
+    }
+
+    public void StopPulse() {
+        this.transform.localScale = Vector3.one * normalScale;
+        if (pulseCoroutine != null)
+            StopCoroutine(pulseCoroutine);
+    }
+
+    public IEnumerator IPulse(float speed, bool loop = true) {
+        float lerp = 0f;
+        Transform trf = this.transform;
+        do {
+            lerp = 0f;
+            while (lerp < 1f) {//crescendo
+                lerp += Time.deltaTime * speed;
+                trf.localScale = Vector3.Lerp(trf.localScale, Vector3.one * pulseScale, lerp);
+                yield return new WaitForEndOfFrame();
+            }
+            lerp = 0f;
+            while (lerp < 1f) {//diminuindo
+                lerp += Time.deltaTime * speed;
+                trf.localScale = Vector3.Lerp(trf.localScale, Vector3.one * normalScale, lerp);
+                yield return new WaitForEndOfFrame();
+            }
+        } while (loop);
     }
 }
