@@ -66,17 +66,11 @@ public class StageManager : MonoBehaviour {
 	private StageData stageData;
 
 	void Awake () {
-		LoadResourceTextfile ("stages");
+		stageData = JSONParser.LoadResources ();
+		image.GetComponent<SpriteRenderer> ().sprite = Resources.Load(stageData.stages[0].name, typeof(Sprite)) as Sprite;;
+
 		SetupHLFromJSON ();
 		SetupPFsFromJSON ();
-	}
-
-	void LoadResourceTextfile(string path)
-	{
-		TextAsset file = Resources.Load(path) as TextAsset;
-		string content = file.ToString ();
-	
-		stageData = JsonUtility.FromJson<StageData>(content);
 	}
 
 	private void SetupHLFromJSON () {
@@ -96,7 +90,7 @@ public class StageManager : MonoBehaviour {
 			PFs.Add (newPF);
 		}
 
-		PFCount = stageData.stages [0].pfs.Length;
+		PFCount = stageData.stages [0].pfs.Count;
 	}
 
 	private void setLine(GameObject line, Element jsonLine) {

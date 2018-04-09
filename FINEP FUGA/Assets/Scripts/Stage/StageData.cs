@@ -23,11 +23,11 @@ public class Stage
 {
 	public string name;
 	public Vector3 horizonLineHit;
-	public Point[] pfs;
+	public List<Point> pfs;
 }
 
 [System.Serializable]
 public class StageData
 {
-	public Stage[] stages;
+	public List<Stage> stages;
 }

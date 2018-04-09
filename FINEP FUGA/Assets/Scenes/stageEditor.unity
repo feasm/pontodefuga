@@ -534,7 +534,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4300763329040466, guid: df671f942adb448c89bb0807ab622b13, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 100.62722
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 4300763329040466, guid: df671f942adb448c89bb0807ab622b13, type: 2}
       propertyPath: m_LocalRotation.x
@@ -586,6 +586,54 @@ Prefab:
       propertyPath: m_Color.b
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4429894752813612, guid: df671f942adb448c89bb0807ab622b13, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -1.49
+      objectReference: {fileID: 0}
+    - target: {fileID: 4429894752813612, guid: df671f942adb448c89bb0807ab622b13, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4429894752813612, guid: df671f942adb448c89bb0807ab622b13, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0.9997969
+      objectReference: {fileID: 0}
+    - target: {fileID: 4429894752813612, guid: df671f942adb448c89bb0807ab622b13, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 0.020153819
+      objectReference: {fileID: 0}
+    - target: {fileID: 4429894752813612, guid: df671f942adb448c89bb0807ab622b13, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -177.69
+      objectReference: {fileID: 0}
+    - target: {fileID: 4429894752813612, guid: df671f942adb448c89bb0807ab622b13, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 39.58489
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283952003056680, guid: df671f942adb448c89bb0807ab622b13, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -1.64
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283952003056680, guid: df671f942adb448c89bb0807ab622b13, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -0.48000002
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283952003056680, guid: df671f942adb448c89bb0807ab622b13, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0.018286455
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283952003056680, guid: df671f942adb448c89bb0807ab622b13, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 0.99983287
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283952003056680, guid: df671f942adb448c89bb0807ab622b13, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 2.0960002
+      objectReference: {fileID: 0}
+    - target: {fileID: 4283952003056680, guid: df671f942adb448c89bb0807ab622b13, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 37.74197
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: df671f942adb448c89bb0807ab622b13, type: 2}
   m_IsPrefabParent: 0
@@ -594,6 +642,12 @@ Transform:
   m_PrefabParentObject: {fileID: 4300763329040466, guid: df671f942adb448c89bb0807ab622b13,
     type: 2}
   m_PrefabInternal: {fileID: 1101565531}
+--- !u!114 &1101565534 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114465380746149412, guid: df671f942adb448c89bb0807ab622b13,
+    type: 2}
+  m_PrefabInternal: {fileID: 1101565531}
+  m_Script: {fileID: 11500000, guid: 795db0bd700f248368392e1afb9d3144, type: 3}
 --- !u!1 &1403853289
 GameObject:
   m_ObjectHideFlags: 0
@@ -621,8 +675,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 493be66b2969b4623878c49d2e70980b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalLineHit: {x: 0, y: 0, z: 0}
-  PFs: []
+  image: {fileID: 1902238941}
+  horizontalLineHit: {fileID: 1529121723}
+  PFs:
+  - {fileID: 1101565534}
+  helpMessage: 
 --- !u!4 &1403853292
 Transform:
   m_ObjectHideFlags: 0
@@ -658,7 +715,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1529121722}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.15, y: 3.8, z: -5}
+  m_LocalPosition: {x: -0.23, y: -6.95, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1902238939}
@@ -823,7 +880,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 11fb7c9957c5f4212903a14e9c814520, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 838b6f02e72754855ab924e9cb1260aa, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
