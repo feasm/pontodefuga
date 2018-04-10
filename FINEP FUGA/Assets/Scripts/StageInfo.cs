@@ -91,4 +91,8 @@ public class StageInfo : MonoBehaviour {
 
         return str;
     }
+
+    public void UnlockLevel(int world, int level) {
+        PlayerPrefs.SetInt("unlocked_" + world.ToString("00") + "_" + level.ToString("00"), 1);
+    }
 }
