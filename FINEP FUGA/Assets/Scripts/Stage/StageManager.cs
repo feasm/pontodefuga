@@ -51,7 +51,7 @@ public class StageManager : MonoBehaviour {
 	public PF PFPrefab;
 	public List<PF> PFs;
 	public List<Vector3> initialPFsPosition;
-	private GameObject PF;
+	private PF PF;
 
 	private bool PFSelected;
 
@@ -63,24 +63,48 @@ public class StageManager : MonoBehaviour {
 	public GameObject PF2Indicator;
 	public GameObject PFIndicator;
 
-	private StageData stageData;
+	private Stage stage;
 
 	void Awake () {
-		stageData = JSONParser.LoadResources ();
-		image.GetComponent<SpriteRenderer> ().sprite = Resources.Load(stageData.stages[StageInfo.instance.GetStageID()].name, typeof(Sprite)) as Sprite;;
+		var stageData = JSONParser.LoadResources ();
+		stage = FindStage (stageData);
+
+		image.GetComponent<SpriteRenderer> ().sprite = Resources.Load(stage.name, typeof(Sprite)) as Sprite;;
 
 		SetupHLFromJSON ();
 		SetupPFsFromJSON ();
 	}
 
+	private Stage FindStage(StageData stageData) {
+		var worldID = StageInfo.instance.GetWorldID ();
+		var worldName = worldID < 10 ? "0" + worldID.ToString () : worldID.ToString ();
+
+		var stageID = StageInfo.instance.GetStageID ();
+		var stageName = stageID < 10 ? "0" + stageID.ToString () : stageID.ToString ();
+		// TEST - Comentar para integrar com menu
+
+		var stageFullName = worldName + "_" + stageName;
+		stageFullName = "03_03";
+
+		foreach (Stage stage in stageData.stages) {
+			if (stage.name == stageFullName) {
+				return stage;
+			}
+		}
+
+		return new Stage ();
+	}
+
 	private void SetupHLFromJSON () {
-		horizonLineHit.transform.localPosition = stageData.stages [StageInfo.instance.GetStageID()].horizonLineHit;
-		Debug.Log (horizonLineHit.transform.position);
+		horizonLineHit.transform.localPosition = stage.horizonLineHit;
 	}
 
 	private void SetupPFsFromJSON() {
-		foreach (Point pf in stageData.stages[StageInfo.instance.GetStageID()].pfs) {
+		var id = 1;
+
+		foreach (Point pf in stage.pfs) {
 			PF newPF = Instantiate(PFPrefab, image.transform.position, Quaternion.identity) as PF;
+			newPF.Setup (id);
 			newPF.transform.position = new Vector3 (pf.pf.position.x, pf.pf.position.y, pf.pf.position.z);
 
 			setLine (newPF.line1, pf.line1);
@@ -88,9 +112,11 @@ public class StageManager : MonoBehaviour {
 
 			initialPFsPosition.Add (newPF.transform.position);
 			PFs.Add (newPF);
+
+			id++;
 		}
 
-		PFCount = stageData.stages [StageInfo.instance.GetStageID()].pfs.Count;
+		PFCount = stage.pfs.Count;
 	}
 
 	private void setLine(GameObject line, Element jsonLine) {
@@ -244,18 +270,20 @@ public class StageManager : MonoBehaviour {
 	}
 
 	private void LockPF(bool hit) {
-		// TODO: Animar linha do horizonte se ajustando no ponto correto
+		// TODO: Animar ponto de fuga se ajustando no ponto correto
 		PF.transform.position = InitialPF;
 		PFSelected = false;
 
 		if (hit) {
+			StepChecker.CheckMarkAtIndex (PF.id);
+
 			PFCount -= 1;
 			if (PFCount == 0) {
 				CompleteStage ();
 			}
 		}
 		if (!hit) {
-			PF.SetActive (false);
+			PF.gameObject.SetActive (false);
 		}
 	}
 
@@ -263,6 +291,7 @@ public class StageManager : MonoBehaviour {
 		var difference = horizonLine.gameObject.transform.position.y - horizonLineHit.transform.position.y;
 
 		if (Mathf.Abs (difference) < HIT_RANGE) {
+			StepChecker.CheckMarkAtIndex (0);
 			LockHorizonLine ();
 		} else {
 			// TODO: Remover se realmente não houver erros
@@ -323,9 +352,9 @@ public class StageManager : MonoBehaviour {
 	}
 
 	public void SelectPF(int index) {
-		PF = PFs [index].gameObject;
+		PF = PFs [index];
 		InitialPF = initialPFsPosition [index];
-		SetActive (PF, true);
+		SetActive (PF.gameObject, true);
 		PFSelected = true;
 	}
 
