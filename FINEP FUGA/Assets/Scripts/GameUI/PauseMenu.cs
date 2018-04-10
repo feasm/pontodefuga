@@ -23,7 +23,16 @@ public class PauseMenu : MonoBehaviour {
             else
                 ShowMenu();
         }
-            
+
+        //TODO: REMOVER DAQUI PRA BAIXO, TESTE!!
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            EndPanel.PlayEndAnimation(0f);
+        }
+        for (int i = 48; i < 58; i++) {
+            if (Input.GetKeyDown((KeyCode)i)) {
+                StepChecker.CheckMarkAtIndex(i - 48);
+            }
+        }
     }
 	
     public void ShowMenu() {

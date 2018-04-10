@@ -54,16 +54,8 @@ public class EndPanel : MonoBehaviour {
 
         //PAINEL DE OPÇÕES DE SAÍDA
         StartCoroutine(IMoveRect(bgPanel.rectTransform, new Vector2(0f, 0f)));
-        StartCoroutine(IFadeImage(bgPanel, 1f));
-        yield return new WaitForSeconds(0.1f);
-
-        //OPCOES DE SAÍDA
-        StartCoroutine(IMoveRect(exitOp1.rectTransform, new Vector2(-135f, 125f)));
-        StartCoroutine(IFadeImage(exitOp1, 1f));
-        yield return new WaitForSeconds(0.1f);
-        StartCoroutine(IMoveRect(exitOp2.rectTransform, new Vector2(-135f, -125f)));
-        StartCoroutine(IFadeImage(exitOp2, 1f));
-        yield return new WaitForSeconds(0.2f);
+        //StartCoroutine(IFadeImage(bgPanel, 1f));
+        yield return new WaitForSeconds(0.3f);
 
         //TEXTOS DE TEMPO
         var stars = StageInfo.instance.GetStartAmount();//ve se tem todas stars
@@ -96,6 +88,21 @@ public class EndPanel : MonoBehaviour {
         //CARIMBO
         StartCoroutine(IScaleRect(stampImage.rectTransform, 1f));
         StartCoroutine(IFadeImage(stampImage, 1f));
+        yield return new WaitForSeconds(0.5f);
+
+        //OPCOES DE SAÍDA
+        StartCoroutine(IMoveRect(exitOp1.rectTransform, new Vector2(-135f, 125f)));
+        StartCoroutine(IFadeImage(exitOp1, 1f));
+        yield return new WaitForSeconds(0.1f);
+
+        StartCoroutine(IMoveRect(exitOp2.rectTransform, new Vector2(-135f, -125f)));
+        StartCoroutine(IFadeImage(exitOp2, 1f));
+        yield return new WaitForSeconds(0.1f);
+
+        StartCoroutine(IPopScale(exitOp1.rectTransform, 1f, 0.95f));
+        yield return new WaitForSeconds(0.1f);
+        StartCoroutine(IPopScale(exitOp2.rectTransform, 1f, 0.95f));
+        yield return new WaitForSeconds(0.3f);
     }
 
     IEnumerator IMoveRect(RectTransform rect, Vector2 destination, float speed = 2.5f) {
