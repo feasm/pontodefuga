@@ -14,6 +14,7 @@ Assets/Scenes/Stages/02/Stage02_04.unity
 Assets/Scenes/Stages/03/Stage03_01.unity
 Assets/Scenes/Stages/03/Stage03_02.unity
 Assets/Scenes/Stages/03/Stage03_04.unity
+Assets/Scenes/Stages/03/Stage03_03.unity
 SceneListEnd?
 721cde3f2521209afadf056b0a12381b Assembly-CSharp.dll:.MenuNotification
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationPlayableAsset
