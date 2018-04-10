@@ -6,7 +6,7 @@ public class PF : MonoBehaviour {
 
 	public GameObject line1;
 	public GameObject line2;
-	int id;
+	public int id;
 
 	string color1 = "0B65D4FF";
 	string color2 = "D7BF07FF";
