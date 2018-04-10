@@ -67,19 +67,19 @@ public class StageManager : MonoBehaviour {
 
 	void Awake () {
 		stageData = JSONParser.LoadResources ();
-		image.GetComponent<SpriteRenderer> ().sprite = Resources.Load(stageData.stages[0].name, typeof(Sprite)) as Sprite;;
+		image.GetComponent<SpriteRenderer> ().sprite = Resources.Load(stageData.stages[StageInfo.instance.GetStageID()].name, typeof(Sprite)) as Sprite;;
 
 		SetupHLFromJSON ();
 		SetupPFsFromJSON ();
 	}
 
 	private void SetupHLFromJSON () {
-		horizonLineHit.transform.localPosition = stageData.stages [0].horizonLineHit;
+		horizonLineHit.transform.localPosition = stageData.stages [StageInfo.instance.GetStageID()].horizonLineHit;
 		Debug.Log (horizonLineHit.transform.position);
 	}
 
 	private void SetupPFsFromJSON() {
-		foreach (Point pf in stageData.stages[0].pfs) {
+		foreach (Point pf in stageData.stages[StageInfo.instance.GetStageID()].pfs) {
 			PF newPF = Instantiate(PFPrefab, image.transform.position, Quaternion.identity) as PF;
 			newPF.transform.position = new Vector3 (pf.pf.position.x, pf.pf.position.y, pf.pf.position.z);
 
@@ -90,7 +90,7 @@ public class StageManager : MonoBehaviour {
 			PFs.Add (newPF);
 		}
 
-		PFCount = stageData.stages [0].pfs.Count;
+		PFCount = stageData.stages [StageInfo.instance.GetStageID()].pfs.Count;
 	}
 
 	private void setLine(GameObject line, Element jsonLine) {
@@ -286,15 +286,10 @@ public class StageManager : MonoBehaviour {
 	private void CompleteStage() {
 		stageCompleted = true;
 
-		// TODO: Animar aparição do Stage Completed
-		var color = StageCompleted.color;
-		color.a = 1;
-		StageCompleted.color = color;
+        StageInfo.instance.SetStageInfo(minuteCount * 60 + secondsCount);
+        EndPanel.PlayEndAnimation(2f);
 
-		// TODO: Chamar StageInfo
-		// StageInfo.instance.SetStageInfo(hourCount * 360 + minuteCount * 60 + secondsCount)
-
-		StartCoroutine (BackToMenu());
+		//StartCoroutine (BackToMenu());
 	}
 
 	private void UpdateTimerUI() {
