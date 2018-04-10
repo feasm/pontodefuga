@@ -286,15 +286,10 @@ public class StageManager : MonoBehaviour {
 	private void CompleteStage() {
 		stageCompleted = true;
 
-		// TODO: Animar aparição do Stage Completed
-		var color = StageCompleted.color;
-		color.a = 1;
-		StageCompleted.color = color;
+        StageInfo.instance.SetStageInfo(minuteCount * 60 + secondsCount);
+        EndPanel.PlayEndAnimation(2f);
 
-		// TODO: Chamar StageInfo
-		// StageInfo.instance.SetStageInfo(hourCount * 360 + minuteCount * 60 + secondsCount)
-
-		StartCoroutine (BackToMenu());
+		//StartCoroutine (BackToMenu());
 	}
 
 	private void UpdateTimerUI() {

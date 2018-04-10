@@ -97,7 +97,7 @@ public class MenuFlowManager : MonoBehaviour {
 
 	public void SelectLevel(int id) {
 		if (changing) return;
-        var scene = "Stage" + StageInfo.instance.GetWorldID().ToString("00") + "_" + id.ToString("00");
+        var scene = "mainStage";
         if (Application.CanStreamedLevelBeLoaded(scene)) {
             StageInfo.instance.SetStageID(id);
             StartCoroutine(ISelectLevel(scene));

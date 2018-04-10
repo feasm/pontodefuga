@@ -33,3 +33,4 @@ sysinfo.txt
 *.apk
 *.unitypackage
 FINEP FUGA/Library/ScriptAssemblies/Assembly-CSharp.dll.mdb
+FINEP FUGA/Temp/UnityLockfile
