@@ -63,24 +63,48 @@ public class StageManager : MonoBehaviour {
 	public GameObject PF2Indicator;
 	public GameObject PFIndicator;
 
-	private StageData stageData;
+	private Stage stage;
 
 	void Awake () {
-		stageData = JSONParser.LoadResources ();
-		image.GetComponent<SpriteRenderer> ().sprite = Resources.Load(stageData.stages[StageInfo.instance.GetStageID()].name, typeof(Sprite)) as Sprite;;
+		var stageData = JSONParser.LoadResources ();
+		stage = FindStage (stageData);
+
+		image.GetComponent<SpriteRenderer> ().sprite = Resources.Load(stage.name, typeof(Sprite)) as Sprite;;
 
 		SetupHLFromJSON ();
 		SetupPFsFromJSON ();
 	}
 
+	private Stage FindStage(StageData stageData) {
+		var worldID = StageInfo.instance.GetWorldID ();
+		var worldName = worldID < 10 ? "0" + worldID.ToString () : worldID.ToString ();
+
+		var stageID = StageInfo.instance.GetStageID ();
+		var stageName = stageID < 10 ? "0" + stageID.ToString () : stageID.ToString ();
+		// TEST - Comentar para integrar com menu
+		stageName = "03_03";
+
+		var stageFullName = worldName + "_" + stageName;
+
+		foreach (Stage stage in stageData.stages) {
+			if (stage.name == stageFullName) {
+				return stage;
+			}
+		}
+
+		return new Stage ();
+	}
+
 	private void SetupHLFromJSON () {
-		horizonLineHit.transform.localPosition = stageData.stages [StageInfo.instance.GetStageID()].horizonLineHit;
-		Debug.Log (horizonLineHit.transform.position);
+		horizonLineHit.transform.localPosition = stage.horizonLineHit;
 	}
 
 	private void SetupPFsFromJSON() {
-		foreach (Point pf in stageData.stages[StageInfo.instance.GetStageID()].pfs) {
+		var id = 1;
+
+		foreach (Point pf in stage.pfs) {
 			PF newPF = Instantiate(PFPrefab, image.transform.position, Quaternion.identity) as PF;
+			newPF.Setup (id);
 			newPF.transform.position = new Vector3 (pf.pf.position.x, pf.pf.position.y, pf.pf.position.z);
 
 			setLine (newPF.line1, pf.line1);
@@ -88,9 +112,11 @@ public class StageManager : MonoBehaviour {
 
 			initialPFsPosition.Add (newPF.transform.position);
 			PFs.Add (newPF);
+
+			id++;
 		}
 
-		PFCount = stageData.stages [StageInfo.instance.GetStageID()].pfs.Count;
+		PFCount = stage.pfs.Count;
 	}
 
 	private void setLine(GameObject line, Element jsonLine) {
