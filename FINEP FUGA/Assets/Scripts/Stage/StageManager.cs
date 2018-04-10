@@ -316,7 +316,9 @@ public class StageManager : MonoBehaviour {
 		stageCompleted = true;
 
         StageInfo.instance.SetStageInfo(minuteCount * 60 + secondsCount);
-        EndPanel.PlayEndAnimation(2f);
+        StageInfo.instance.SaveLevelStarAmount();//salva as estrelas ganhas no level
+        StageInfo.instance.UnlockNextLevel();//desbloqueia o próximo stage caso tenha ganho ao menos 1 estrela
+        EndPanel.PlayEndAnimation(1f);
 
 		//StartCoroutine (BackToMenu());
 	}

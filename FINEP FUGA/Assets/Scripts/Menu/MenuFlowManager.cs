@@ -16,6 +16,11 @@ public class MenuFlowManager : MonoBehaviour {
     static int lastPanel = -1;
     static Vector2 lastContentPos;
 
+    public static void SetLastPanel(int id) {
+        lastPanel = id;
+        lastContentPos = Vector2.zero;
+    }
+
     public RectTransform canvas, panel_title, panel_sky, panel_levels;//itens para a transição de título para transição de fases
 
     public Image[] fadeImages;

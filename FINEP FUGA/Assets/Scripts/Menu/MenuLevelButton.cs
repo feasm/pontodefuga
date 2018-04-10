@@ -7,6 +7,7 @@ public class MenuLevelButton : MonoBehaviour {
     public GameObject[] activeStars;
     public GameObject[] inactiveStars;
     public Image title;
+    public Text completedLevelsText;
     public GameObject activePanel, inactivePanel;
     public string levelKeyPrefix = "world_00_stage_00";
     public int level = 1;
@@ -24,12 +25,13 @@ public class MenuLevelButton : MonoBehaviour {
 	}
 
     public void Setup() {
-        SetLevelKeyPrefix("world_" + StageInfo.instance.GetWorldID().ToString("00") + "_stage_");
+        print("unlocked_" + levelKeyPrefix + level.ToString("00") + " == " + PlayerPrefs.GetInt("unlocked_" + levelKeyPrefix + level.ToString("00"), level)); 
         var unlocked = PlayerPrefs.GetInt("unlocked_" + levelKeyPrefix + level.ToString("00"), level) == 1;
         var stars = PlayerPrefs.GetInt("stars_" + levelKeyPrefix + level.ToString("00"), -1);
 
         ActivateSelf(unlocked);
         ShowStarts(stars);
+        ShowLevelCount();
 
         pulse = true;
     }
@@ -64,8 +66,23 @@ public class MenuLevelButton : MonoBehaviour {
             activeStars[i].SetActive(i < amount);
         }
         for (int i = 0; i < inactiveStars.Length; i++) {
-            inactiveStars[i].SetActive(i >= amount && amount >= 0);
+            inactiveStars[i].SetActive(i >= amount && (amount >= 0 || completedLevelsText != null));
         }
+    }
+
+    void ShowLevelCount() {
+        if(completedLevelsText == null) return;
+
+        var levelCount = StageInfo.instance.GetLevelCount(level);
+        var completed = 0;
+
+        for (int i = 0; i < levelCount; i++) {
+            var stars = PlayerPrefs.GetInt("stars_world_" + level.ToString("00") + "_stage_" + (i + 1).ToString("00"), -1);
+            if (stars > 0)
+                completed++;
+        }
+
+        completedLevelsText.text = completed.ToString("00") + "/<color=#AAAAAA>" + levelCount.ToString("00") + "</color>";
     }
 
     public void Click() {

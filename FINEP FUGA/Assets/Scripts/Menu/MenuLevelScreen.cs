@@ -18,7 +18,7 @@ public class MenuLevelScreen : MonoBehaviour {
 
         for (int i = 0; i < buttons.Length; i++) {
             var jsonKey = StageInfo.instance.GetWorldID().ToString("00") + "_" + (i + 1).ToString("00");
-            var exists = LevelExists(jsonKey);
+            var exists = StageInfo.instance.LevelExists(jsonKey);
             if (exists)
                 scrollSum += scrollIncrement;
             buttons[i].gameObject.SetActive(exists);
@@ -32,14 +32,5 @@ public class MenuLevelScreen : MonoBehaviour {
             size.y = scrollSum;
             scrollRect.sizeDelta = size;
         }
-    }
-
-    bool LevelExists(string levelName) {
-        var data = JSONParser.LoadResources();
-        for (int i = 0; i < data.stages.Count; i++) {
-            if (string.Compare(data.stages[i].name, levelName) == 0)
-                return true;
-        }
-        return false;
     }
 }
