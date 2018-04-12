@@ -14,6 +14,7 @@ public class GameplayTransitions : MonoBehaviour {
     }
 
     public void FadeAndLoadScene(string sceneName) {
+        Time.timeScale = 1f;
         StartCoroutine(IFadeAndLoadScene(sceneName));
     }
 

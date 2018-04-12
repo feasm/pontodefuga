@@ -40,9 +40,13 @@ public class PauseMenu : MonoBehaviour {
         StartCoroutine(IFadeBG(.95f));
         for (int i = 0; i < menuButtons.Length; i++)
             StartCoroutine(IMoveButton(menuButtons[i], true));
+
+        StartCoroutine(ISetTimeScaleDelayed(0f, .2f));//para o tempo depois de uns segundos
     }
 
     public void HideMenu() {
+        Time.timeScale = 1f;//volta o tempo ao normal
+
         StartCoroutine(IHidePanel(true, .2f));
         StartCoroutine(IFadeBG(0f));
         for (int i = 0; i < menuButtons.Length; i++)
@@ -84,5 +88,10 @@ public class PauseMenu : MonoBehaviour {
            
             yield return new WaitForEndOfFrame();
         }
+    }
+
+    IEnumerator ISetTimeScaleDelayed(float scale, float delay) {
+        yield return new WaitForSecondsRealtime(delay);
+        Time.timeScale = scale;
     }
 }

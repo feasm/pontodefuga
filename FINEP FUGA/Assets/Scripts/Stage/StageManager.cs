@@ -39,10 +39,6 @@ public class StageManager : MonoBehaviour {
 	public Text timeText;
 	public Text errorsText;
 
-	private float secondsCount;
-	private int minuteCount;
-	private int hourCount;
-
 	public CanvasGroup scrollView;
 
 	private int PFCount;
@@ -73,6 +69,9 @@ public class StageManager : MonoBehaviour {
 
 		SetupHLFromJSON ();
 		SetupPFsFromJSON ();
+
+        //Set do stageTime para 0
+        StageInfo.instance.SetStageTime(0f);
 	}
 
 	private Stage FindStage(StageData stageData) {
@@ -315,7 +314,7 @@ public class StageManager : MonoBehaviour {
 	private void CompleteStage() {
 		stageCompleted = true;
 
-        StageInfo.instance.SetStageInfo(minuteCount * 60 + secondsCount);
+        //StageInfo.instance.SetStageTime(minuteCount * 60 + secondsCount);
         StageInfo.instance.SaveLevelStarAmount();//salva as estrelas ganhas no level
         StageInfo.instance.UnlockNextLevel();//desbloqueia o próximo stage caso tenha ganho ao menos 1 estrela
         EndPanel.PlayEndAnimation(1f);
@@ -327,23 +326,27 @@ public class StageManager : MonoBehaviour {
 		if (stageCompleted)
 			return;
 
-		secondsCount += Time.deltaTime;
+        StageInfo.instance.incrementStageTime(Time.deltaTime);
+        var minuteCount = Mathf.FloorToInt(StageInfo.instance.GetStageTime() / 60f);
+        var secondsCount = Mathf.FloorToInt(StageInfo.instance.GetStageTime() - minuteCount * 60);
 
 		// var hourChar = hourCount < 10 ? "0" + hourCount.ToString() : hourCount.ToString();
 		// var minuteChar = minuteCount < 10 ? "0" + minuteCount.ToString() : minuteCount.ToString();
+
 		var minuteChar = minuteCount == 0 ? "" : minuteCount.ToString() + "m ";
-		var secondsChar = secondsCount < 10 ? "0" + ((int)secondsCount).ToString() : ((int)secondsCount).ToString();
+		var secondsChar = secondsCount < 10 ? "0" + secondsCount.ToString() : secondsCount.ToString();
 
 		// timeText.text = hourChar +":"+ minuteChar +":"+secondsChar;
 		timeText.text = minuteChar + secondsChar + "s";
 
+        /*
 		if(secondsCount >= 60){
 			minuteCount++;
 			secondsCount = 0;
 		}else if(minuteCount >= 60){
 			hourCount++;
 			minuteCount = 0;
-		}    
+		}    */
 	}
 
 	private IEnumerator BackToMenu() {
