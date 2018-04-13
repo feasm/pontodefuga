@@ -19,8 +19,13 @@ public class StageInfo : MonoBehaviour {
         DontDestroyOnLoad(this.gameObject);
 	}
 
-    public void SetStageInfo(float time) {
+    public void SetStageTime(float time) {
         stageTime = time;
+    }
+
+    //incrementa stage time em certa quantia
+    public void incrementStageTime(float amount) {
+        stageTime += amount;
     }
 
     public void SetDifficultyMultiplier(float multiplier) {
@@ -45,8 +50,10 @@ public class StageInfo : MonoBehaviour {
 
     //pega o número de estrelas ganhas no stage atual, assume que SetWorldID e SetStageID foram chamados
     public int GetStartAmount() {
+        var convertedTime = Mathf.FloorToInt(stageTime);
+
         for (int i = 0; i < starTimes.Length; i++) {
-            if (stageTime < starTimes[i] * difficultyMultiplier)
+            if (convertedTime <= Mathf.FloorToInt(starTimes[i] * difficultyMultiplier))
                 return starTimes.Length - i;
         }
         return 0;
