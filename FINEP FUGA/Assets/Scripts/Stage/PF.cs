@@ -8,10 +8,10 @@ public class PF : MonoBehaviour {
 	public GameObject line2;
 	public int id;
 
-	string color1 = "0B65D4FF";
-	string color2 = "D7BF07FF";
-	string color3 = "D76007FF";
-	string color4 = "D70707FF";
+	string color1 = "#0B65D4FF";
+	string color2 = "#D7BF07FF";
+	string color3 = "#D76007FF";
+	string color4 = "#D70707FF";
 
 	public void Setup(int id) {
 		this.id = id;
