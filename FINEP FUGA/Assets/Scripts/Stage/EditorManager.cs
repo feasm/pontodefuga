@@ -28,7 +28,7 @@ public class EditorManager : MonoBehaviour {
 			Point point = new Point ();
 
 			point.pf = new Element ();
-			point.pf.position = pf.gameObject.transform.localPosition;
+			point.pf.position = pf.gameObject.transform.position;
 			point.pf.scale = pf.gameObject.transform.localScale;
 			point.pf.rotation = pf.gameObject.transform.eulerAngles;
 
@@ -47,8 +47,25 @@ public class EditorManager : MonoBehaviour {
 
 		stage.pfs = pfs;
 
+
 		StageData stages = JSONParser.LoadResources ();
-		stages.stages.Add (stage);
+
+		var replaced = false;
+		var index = 0;
+
+		foreach (Stage stg in stages.stages) {
+			if (stg.name == stage.name) {
+				replaced = true;
+				stages.stages [index] = stage;
+				break;
+			}
+
+			index++;
+		}
+
+		if (!replaced) {
+			stages.stages.Add (stage);
+		}
 
 		JSONParser.SaveResources (stages);
 	}

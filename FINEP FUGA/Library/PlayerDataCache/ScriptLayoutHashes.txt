@@ -2,6 +2,7 @@ Android
 SceneListBegin?
 Assets/Scenes/menu.unity
 Assets/Scenes/mainStage.unity
+Assets/Scenes/Stages/01/Stage01_01.unity
 Assets/Scenes/stageEditor.unity
 SceneListEnd?
 721cde3f2521209afadf056b0a12381b Assembly-CSharp.dll:.MenuNotification
@@ -120,6 +121,10 @@ bc68edb0af574bf79f9550ead8ebae5c UnityEngine.HoloLens.dll:UnityEngine.Audio.Audi
 c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingCollider
 45f3431f0103c41611e8d4eec3d439df UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingRenderer
 0ab9ca676d755751af61ef47fef7dc79 Assembly-CSharp.dll:.AudioPlayer
+<<<<<<< HEAD
+e675c3292927aae22944c1a5141a0407 Assembly-CSharp.dll:.PauseMenu
+e51eb76cdd6542ada39c5fef16270916 Assembly-CSharp.dll:.MenuFlowManager
+=======
 26215f135eeb48d8fa1189498c107f6c Vuforia.UnityExtensions.dll:Vuforia.AnchorBehaviour
 0561521e336e270e6e5a9c61387cb838 Vuforia.UnityExtensions.dll:Vuforia.AnchorInputListenerBehaviour
 2e0fd93f459db951da0e2e94e2e33fb7 Vuforia.UnityExtensions.dll:Vuforia.AnchorStageBehaviour
@@ -192,6 +197,7 @@ d2a2bd333db22f480a8589e167314ecc Vuforia.UnityExtensions.dll:Vuforia.UserDefined
 3d1b89310e77c34bc0c8d7132231345c Vuforia.UnityExtensions.dll:Vuforia.WireframeBehaviour
 05524b8f659e7bfe5756d1335fec24ba Vuforia.UnityExtensions.dll:Vuforia.WireframeTrackableEventHandler
 15bea26698002c6c4a3087131232ce5c Vuforia.UnityExtensions.dll:Vuforia.WordBehaviour
+>>>>>>> origin/develop
 9541688f4cdd2b2a71365bbc6c03b12d Assembly-CSharp.dll:.MenuLevelButton
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Advertisements.dll:UnityEngine.Advertisements.CallbackExecutor
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Advertisements.dll:UnityEngine.Advertisements.Editor.Placeholder
@@ -232,6 +238,9 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 5ad7b4b2076a40e6abf5d14ba7e4079a Assembly-CSharp.dll:.PF
 9b402cdf94eabb677a58a41b9a63fc4f Assembly-CSharp.dll:.ObjectBuilderScript
 eee53bc02ed84fb728655cd4b23b1151 Assembly-CSharp.dll:.EndPanel
+<<<<<<< HEAD
+4a1eb9ef47803cc810fa1e77cd548d88 Assembly-CSharp.dll:.StepChecker
+=======
 26215f135eeb48d8fa1189498c107f6c Vuforia.UnityExtensions.dll:Vuforia.AnchorBehaviour
 0561521e336e270e6e5a9c61387cb838 Vuforia.UnityExtensions.dll:Vuforia.AnchorInputListenerBehaviour
 2e0fd93f459db951da0e2e94e2e33fb7 Vuforia.UnityExtensions.dll:Vuforia.AnchorStageBehaviour
@@ -303,3 +312,4 @@ d2a2bd333db22f480a8589e167314ecc Vuforia.UnityExtensions.dll:Vuforia.UserDefined
 3d1b89310e77c34bc0c8d7132231345c Vuforia.UnityExtensions.dll:Vuforia.WireframeBehaviour
 05524b8f659e7bfe5756d1335fec24ba Vuforia.UnityExtensions.dll:Vuforia.WireframeTrackableEventHandler
 15bea26698002c6c4a3087131232ce5c Vuforia.UnityExtensions.dll:Vuforia.WordBehaviour
+>>>>>>> origin/develop

@@ -12,7 +12,7 @@ public class StageManager : MonoBehaviour {
 	};
 
 	// TODO: Deixar esta variável proporcional a SCREEN_SIZE
-	public static float HIT_RANGE = .2f;
+	public static float HIT_RANGE = .4f;
 	public static float CHANGE_STATE_SPEED = 5;
 
 	GameState state;
@@ -83,7 +83,7 @@ public class StageManager : MonoBehaviour {
 		// TEST - Comentar para integrar com menu
 
 		var stageFullName = worldName + "_" + stageName;
-		stageFullName = "03_03";
+		// stageFullName = "03_03";
 
 		foreach (Stage stage in stageData.stages) {
 			if (stage.name == stageFullName) {
@@ -407,6 +407,12 @@ public class StageManager : MonoBehaviour {
 		}
 
 		state = GameState.EscapePoint;
+
+		image.transform.position = new Vector3 (initialImagePosition.x, image.transform.position.y, image.transform.position.z);
+
+		horizonLine.transform.position = new Vector3 (initialImagePosition.x, horizonLine.transform.position.y, horizonLine.transform.position.z);
+
+		imageHeader.anchoredPosition = initialImageHeaderPosition;
 	}
 }
 
