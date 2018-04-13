@@ -122,7 +122,7 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 0ab9ca676d755751af61ef47fef7dc79 Assembly-CSharp.dll:.AudioPlayer
 e675c3292927aae22944c1a5141a0407 Assembly-CSharp.dll:.PauseMenu
 e51eb76cdd6542ada39c5fef16270916 Assembly-CSharp.dll:.MenuFlowManager
-9541688f4cdd2b2a71365bbc6c03b12d Assembly-CSharp.dll:.MenuLevelButton
+868ef2d472cddda7b7bd7e19d50a1ade Assembly-CSharp.dll:.MenuLevelButton
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Advertisements.dll:UnityEngine.Advertisements.CallbackExecutor
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Advertisements.dll:UnityEngine.Advertisements.Editor.Placeholder
 32e8fe00b63ed946490b898f6024a2f2 Facebook.Unity.Settings.dll:Facebook.Unity.Settings.FacebookSettings
@@ -161,6 +161,6 @@ c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.Spa
 9de3a22eca9aefadba2d10d5987cefe3 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
 5ad7b4b2076a40e6abf5d14ba7e4079a Assembly-CSharp.dll:.PF
 9b402cdf94eabb677a58a41b9a63fc4f Assembly-CSharp.dll:.ObjectBuilderScript
-eee53bc02ed84fb728655cd4b23b1151 Assembly-CSharp.dll:.EndPanel
+f1cfb35aec425aab0867a4f2cfab49f4 Assembly-CSharp.dll:.EndPanel
 4a1eb9ef47803cc810fa1e77cd548d88 Assembly-CSharp.dll:.StepChecker
 0c114f41d738d496b52ba873817382da Assembly-CSharp.dll:.StarPreview
