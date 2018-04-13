@@ -11,6 +11,7 @@ public class EndPanel : MonoBehaviour {
     public Image background;//BG, que dá fade pra ficar 100% opaco
 
     public Image stageImage;//a imagem do estágio, que aparece à esquerda da tela
+    public Image darkPanel;//painel sobre imagem
     public Image bgPanel;//painel da dreita que mostra as ops de saída
     public Image exitOp1, exitOp2;//opções de saída
 
@@ -49,6 +50,8 @@ public class EndPanel : MonoBehaviour {
         yield return new WaitForSeconds(0.1f);
 
         //IMAGEM DA FASE
+        var file = StageInfo.instance.GetWorldID().ToString("00") + "_" + StageInfo.instance.GetStageID().ToString("00");
+        stageImage.sprite = Resources.Load<Sprite>(file);
         StartCoroutine(IMoveRect(stageImage.rectTransform, new Vector2(100, 0)));
         StartCoroutine(IFadeImage(stageImage, 1f));
 
@@ -84,6 +87,10 @@ public class EndPanel : MonoBehaviour {
             AudioPlayer.instance.PlayAudio(starSounds[i]);
         }
         yield return new WaitForSeconds(0.6f);
+
+        //Darken na imagem
+        StartCoroutine(IFadeImage(darkPanel, 0.4f));
+        yield return new WaitForSeconds(0.2f);
 
         //CARIMBO
         StartCoroutine(IScaleRect(stampImage.rectTransform, 1f));

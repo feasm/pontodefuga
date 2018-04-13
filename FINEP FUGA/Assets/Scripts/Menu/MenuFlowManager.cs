@@ -273,4 +273,12 @@ public class MenuFlowManager : MonoBehaviour {
     public void GoBack() {
         goBack = true;
     }
+
+    public void CheatUnlockLevel() {
+        var si = StageInfo.instance;
+        si.UnlockNextLevel(true);
+
+        if (si.LevelExists(si.GetWorldID().ToString("00") + "_" + (si.GetStageID() + 1).ToString("00")))
+            si.SetStageID(StageInfo.instance.GetStageID() + 1);
+    }
 }

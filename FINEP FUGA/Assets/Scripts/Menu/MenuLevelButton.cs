@@ -7,6 +7,7 @@ public class MenuLevelButton : MonoBehaviour {
     public GameObject[] activeStars;
     public GameObject[] inactiveStars;
     public Image title;
+    public Image[] previewImages;
     public Text completedLevelsText;
     public GameObject activePanel, inactivePanel;
     public string levelKeyPrefix = "world_00_stage_00";
@@ -32,6 +33,7 @@ public class MenuLevelButton : MonoBehaviour {
         ActivateSelf(unlocked);
         ShowStarts(stars);
         ShowLevelCount();
+        LoadPreviewImages();
 
         pulse = true;
     }
@@ -83,6 +85,12 @@ public class MenuLevelButton : MonoBehaviour {
         }
 
         completedLevelsText.text = completed.ToString("00") + "/<color=#AAAAAA>" + levelCount.ToString("00") + "</color>";
+    }
+
+    void LoadPreviewImages() {
+        var file = StageInfo.instance.GetWorldID().ToString("00") + "_" + level.ToString("00");
+        for (int i = 0; i < previewImages.Length; i++ )
+            previewImages[i].sprite = Resources.Load<Sprite>(file);
     }
 
     public void Click() {
