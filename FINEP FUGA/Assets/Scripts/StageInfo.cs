@@ -132,8 +132,8 @@ public class StageInfo : MonoBehaviour {
         return count;
     }
 
-    public void UnlockNextLevel() {
-        if (GetStartAmount() <= 0)//não libera a próxima se não conseguir nenhuma estrela
+    public void UnlockNextLevel(bool force = false) {
+        if (GetStartAmount() <= 0 && !force)//não libera a próxima se não conseguir nenhuma estrela
             return;
 
         var str = "unlocked_world_" + worldID.ToString("00");
@@ -143,6 +143,8 @@ public class StageInfo : MonoBehaviour {
             str = "unlocked_world_" + (worldID + 1).ToString("00");
             MenuFlowManager.SetLastPanel(0);//volta para o menu, pois liberou novo mundo
         }
+
+        print("UNLOCKED: " + stageID);
 
         PlayerPrefs.SetInt(str, 1);
     }
